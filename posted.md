@@ -13,3 +13,4 @@
 | 2026-09-30 21:55 | Simple adding: 1 + 1 to 5 with apples | kids/adding_apples_1_to_5.mp4 | no | 385172793 |
 | 2026-09-30 22:54 | Sharing the last dumpling (sharing) | kids/sharing_last_dumpling.mp4 | no | 385218088 |
 | 2026-09-30 23:57 | Simple taking away with cookies | kids/taking_away_cookies.mp4 | no | 385260388 |
+| 2026-10-01 00:50 | Number shapes: how to write 1 to 5 | kids/writing_numbers_1_to_5.mp4 | no | |

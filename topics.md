@@ -17,7 +17,7 @@ When every topic here is used, the run invents new, genuinely different lessons
 - More or less? Comparing groups (done)
 - Simple adding: 1 + 1 to 5 with apples (done)
 - Simple taking away with cookies (done)
-- Number shapes: how to write 1 to 5
+- Number shapes: how to write 1 to 5 (done)
 - Number shapes: how to write 6 to 10
 - Zero means none
 - Odd and even numbers
