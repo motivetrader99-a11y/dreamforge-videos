@@ -115,7 +115,7 @@ Original cast, big-eyed anime look, soft pastel fantasy world "Petal Valley":
 - Mochi — tiny round cloud dragon, sky blue, loves snacks
 - Professor Owlbert — wise old owl with round glasses
 Every episode: a small adventure with a gentle problem, no scary villains or fighting, ending with one clear lesson.
-- Mochi can't fly yet (keep trying)
+- Mochi can't fly yet (keep trying) (done)
 - The lost baby star (helping others)
 - Sharing the last dumpling (sharing)
 - Hana says sorry (apologising)
