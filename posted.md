@@ -11,3 +11,4 @@
 | 2026-09-30 18:58 | The lost baby star (helping others) | kids/lost_baby_star.mp4 | no | 385030510 |
 | 2026-09-30 19:55 | More or less? Comparing groups | kids/more_or_less_comparing_groups.mp4 | no | 385075742 |
 | 2026-09-30 21:55 | Simple adding: 1 + 1 to 5 with apples | kids/adding_apples_1_to_5.mp4 | no | 385172793 |
+| 2026-09-30 22:54 | Sharing the last dumpling (sharing) | kids/sharing_last_dumpling.mp4 | no | |

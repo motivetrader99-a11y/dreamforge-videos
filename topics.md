@@ -117,7 +117,7 @@ Original cast, big-eyed anime look, soft pastel fantasy world "Petal Valley":
 Every episode: a small adventure with a gentle problem, no scary villains or fighting, ending with one clear lesson.
 - Mochi can't fly yet (keep trying) (done)
 - The lost baby star (helping others) (done)
-- Sharing the last dumpling (sharing)
+- Sharing the last dumpling (sharing) (done)
 - Hana says sorry (apologising)
 - The rainbow bridge is broken (teamwork)
 - Mochi is afraid of the dark (being brave)
