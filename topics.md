@@ -19,7 +19,7 @@ When every topic here is used, the run invents new, genuinely different lessons
 - Simple taking away with cookies (done)
 - Number shapes: how to write 1 to 5 (done)
 - Number shapes: how to write 6 to 10 (done)
-- Zero means none
+- Zero means none (done)
 - Odd and even numbers
 
 ## Colors
