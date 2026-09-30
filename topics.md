@@ -14,7 +14,7 @@ When every topic here is used, the run invents new, genuinely different lessons
 - Count backwards 10 to 1 (rocket launch) (done)
 - Counting by 2s up to 20 (done)
 - Counting fish 11 to 20 (done)
-- More or less? Comparing groups
+- More or less? Comparing groups (done)
 - Simple adding: 1 + 1 to 5 with apples
 - Simple taking away with cookies
 - Number shapes: how to write 1 to 5
