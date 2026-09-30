@@ -1,5 +1,8 @@
 # Dreamforge Kids — lesson topics
 
+Rotation: every 3rd video (when the number of rows in posted.md is a multiple of 3)
+is an "Anime Adventures" story episode; the rest are lessons.
+
 Each hourly run takes the first topic that is NOT already listed in `posted.md`,
 makes a brand-new video for it, and records it in `posted.md`.
 When every topic here is used, the run invents new, genuinely different lessons
@@ -105,3 +108,30 @@ When every topic here is used, the run invents new, genuinely different lessons
 - Money: coins
 - Musical instruments
 - Helpers in our community
+
+## Anime Adventures (kid-friendly anime-style story episodes)
+Original cast, big-eyed anime look, soft pastel fantasy world "Petal Valley":
+- Hana — cheerful girl explorer, pink hair in two buns, yellow scarf
+- Mochi — tiny round cloud dragon, sky blue, loves snacks
+- Professor Owlbert — wise old owl with round glasses
+Every episode: a small adventure with a gentle problem, no scary villains or fighting, ending with one clear lesson.
+- Mochi can't fly yet (keep trying)
+- The lost baby star (helping others)
+- Sharing the last dumpling (sharing)
+- Hana says sorry (apologising)
+- The rainbow bridge is broken (teamwork)
+- Mochi is afraid of the dark (being brave)
+- The garden needs water (caring for plants)
+- A new friend who looks different (kindness)
+- Waiting for your turn on the swing (patience)
+- The messy treehouse (tidying up)
+- Owlbert's birthday surprise (thinking of others)
+- Telling the truth about the broken vase (honesty)
+- Mochi gets a cold (resting and washing hands)
+- The sleepy moon can't rise (bedtime routine)
+- Too many sweets (healthy food)
+- The river clean-up (caring for nature)
+- Hana feels left out (including everyone)
+- Lost in the flower maze (asking for help)
+- The talking seed grows (patience and growth)
+- Say please to the gate guardian (manners)
