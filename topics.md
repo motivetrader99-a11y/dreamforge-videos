@@ -118,7 +118,7 @@ Every episode: a small adventure with a gentle problem, no scary villains or fig
 - Mochi can't fly yet (keep trying) (done)
 - The lost baby star (helping others) (done)
 - Sharing the last dumpling (sharing) (done)
-- Hana says sorry (apologising)
+- Hana says sorry (apologising) (done)
 - The rainbow bridge is broken (teamwork)
 - Mochi is afraid of the dark (being brave)
 - The garden needs water (caring for plants)
