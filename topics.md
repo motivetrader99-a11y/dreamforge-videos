@@ -10,7 +10,7 @@ When every topic here is used, the run invents new, genuinely different lessons
 
 ## Numbers
 - Count the Stars 1 to 10 (done)
-- Count the Balloons 1 to 5
+- Count the Balloons 1 to 5 (done)
 - Count backwards 10 to 1 (rocket launch)
 - Counting by 2s up to 20
 - Counting fish 11 to 20
