@@ -22,3 +22,4 @@
 | 2026-10-01 06:55 | Red things | kids/red_things.mp4 | no | 385477905 |
 | 2026-10-01 07:54 | Mochi is afraid of the dark (being brave) | kids/mochi_afraid_of_the_dark.mp4 | no | 385497565 |
 | 2026-10-01 08:57 | Blue things | kids/blue_things.mp4 | no | 385516423 |
+| 2026-10-01 09:55 | Yellow things | kids/yellow_things.mp4 | no | |
