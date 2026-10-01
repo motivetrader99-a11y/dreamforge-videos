@@ -19,3 +19,4 @@
 | 2026-10-01 03:55 | Zero means none | kids/zero_means_none.mp4 | no | 385406226 |
 | 2026-10-01 04:56 | The rainbow bridge is broken (teamwork) | kids/rainbow_bridge_teamwork.mp4 | no | 385433777 |
 | 2026-10-01 05:55 | Odd and even numbers | kids/odd_and_even_numbers.mp4 | no | 385456516 |
+| 2026-10-01 06:55 | Red things | kids/red_things.mp4 | no |  |

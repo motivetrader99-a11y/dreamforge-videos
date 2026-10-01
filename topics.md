@@ -23,7 +23,7 @@ When every topic here is used, the run invents new, genuinely different lessons
 - Odd and even numbers (done)
 
 ## Colors
-- Red things
+- Red things (done)
 - Blue things
 - Yellow things
 - Green things
