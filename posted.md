@@ -20,3 +20,4 @@
 | 2026-10-01 04:56 | The rainbow bridge is broken (teamwork) | kids/rainbow_bridge_teamwork.mp4 | no | 385433777 |
 | 2026-10-01 05:55 | Odd and even numbers | kids/odd_and_even_numbers.mp4 | no | 385456516 |
 | 2026-10-01 06:55 | Red things | kids/red_things.mp4 | no | 385477905 |
+| 2026-10-01 07:54 | Mochi is afraid of the dark (being brave) | kids/mochi_afraid_of_the_dark.mp4 | no | |

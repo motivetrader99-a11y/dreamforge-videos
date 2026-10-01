@@ -120,7 +120,7 @@ Every episode: a small adventure with a gentle problem, no scary villains or fig
 - Sharing the last dumpling (sharing) (done)
 - Hana says sorry (apologising) (done)
 - The rainbow bridge is broken (teamwork) (done)
-- Mochi is afraid of the dark (being brave)
+- Mochi is afraid of the dark (being brave) (done)
 - The garden needs water (caring for plants)
 - A new friend who looks different (kindness)
 - Waiting for your turn on the swing (patience)
