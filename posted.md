@@ -26,4 +26,4 @@
 | 2026-10-01 10:58 | The garden needs water (caring for plants) | kids/garden_needs_water.mp4 | no | 385552964 |
 | 2026-10-01 11:58 | Green things | kids/green_things.mp4 | no | 385575413 |
 | 2026-10-01 12:59 | Mixing colors: red + yellow = orange | kids/mixing_red_yellow_orange.mp4 | no | 385615180 |
-| 2026-10-01 13:57 | A new friend who looks different (kindness) | kids/new_friend_looks_different.mp4 | no | |
+| 2026-10-01 13:57 | A new friend who looks different (kindness) | kids/new_friend_looks_different.mp4 | no | 385649796 |
