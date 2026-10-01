@@ -121,7 +121,7 @@ Every episode: a small adventure with a gentle problem, no scary villains or fig
 - Hana says sorry (apologising) (done)
 - The rainbow bridge is broken (teamwork) (done)
 - Mochi is afraid of the dark (being brave) (done)
-- The garden needs water (caring for plants)
+- The garden needs water (caring for plants) (done)
 - A new friend who looks different (kindness)
 - Waiting for your turn on the swing (patience)
 - The messy treehouse (tidying up)
