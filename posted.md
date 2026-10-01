@@ -28,3 +28,4 @@
 | 2026-10-01 12:59 | Mixing colors: red + yellow = orange | kids/mixing_red_yellow_orange.mp4 | no | 385615180 |
 | 2026-10-01 13:57 | A new friend who looks different (kindness) | kids/new_friend_looks_different.mp4 | no | 385649796 |
 | 2026-10-01 14:56 | Mixing colors: blue + yellow = green | kids/mixing_blue_yellow_green.mp4 | no | 385692266 |
+| 2026-10-01 15:56 | Mixing colors: red + blue = purple | kids/mixing_red_blue_purple.mp4 | no |  |
