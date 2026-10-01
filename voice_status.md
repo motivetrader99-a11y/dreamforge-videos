@@ -1,1 +1,1 @@
-disabled until 2026-10-01 14:50 IST: ElevenLabs free tier disabled ("unusual activity detected"), paid plan required
+disabled until 2026-10-02 14:53 IST: ElevenLabs speech generated OK but the audio file could not be downloaded (storage.googleapis.com blocked by the sandbox egress proxy, 403)
