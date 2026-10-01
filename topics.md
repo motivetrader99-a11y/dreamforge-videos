@@ -1,3 +1,5 @@
+> Archived: toddler series stopped on 2026-10-01; the channel now posts teen anime (see teens.md).
+
 # Dreamforge Kids — lesson topics
 
 Rotation: every 3rd video (when the number of rows in posted.md is a multiple of 3)
