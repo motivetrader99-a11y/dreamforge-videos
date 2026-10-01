@@ -27,7 +27,7 @@ When every topic here is used, the run invents new, genuinely different lessons
 - Blue things (done)
 - Yellow things (done)
 - Green things (done)
-- Mixing colors: red + yellow = orange
+- Mixing colors: red + yellow = orange (done)
 - Mixing colors: blue + yellow = green
 - Mixing colors: red + blue = purple
 - The rainbow order
