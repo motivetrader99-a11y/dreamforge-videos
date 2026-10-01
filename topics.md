@@ -20,7 +20,7 @@ When every topic here is used, the run invents new, genuinely different lessons
 - Number shapes: how to write 1 to 5 (done)
 - Number shapes: how to write 6 to 10 (done)
 - Zero means none (done)
-- Odd and even numbers
+- Odd and even numbers (done)
 
 ## Colors
 - Red things
