@@ -31,7 +31,7 @@ When every topic here is used, the run invents new, genuinely different lessons
 - Mixing colors: blue + yellow = green (done)
 - Mixing colors: red + blue = purple (done)
 - The rainbow order (done)
-- Light and dark colors
+- Light and dark colors (done)
 - Color sorting game
 
 ## Shapes
