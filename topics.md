@@ -123,7 +123,7 @@ Every episode: a small adventure with a gentle problem, no scary villains or fig
 - Mochi is afraid of the dark (being brave) (done)
 - The garden needs water (caring for plants) (done)
 - A new friend who looks different (kindness) (done)
-- Waiting for your turn on the swing (patience)
+- Waiting for your turn on the swing (patience) (done)
 - The messy treehouse (tidying up)
 - Owlbert's birthday surprise (thinking of others)
 - Telling the truth about the broken vase (honesty)
