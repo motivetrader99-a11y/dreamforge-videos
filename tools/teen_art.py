@@ -44,12 +44,19 @@ def head_shape():
             [(302, 410), (316, 535), (372, 624), (450, 666), (528, 624), (584, 535), (598, 410)])
 
 @lru_cache(None)
-def ren_bust(expr="calm", mouth=0, blink=False, phase=0):
+def ren_bust(expr="calm", mouth=0, blink=False, phase=0, hilt=True):
     im = new_layer(); d = ImageDraw.Draw(im)
     # broken sword hilt over right shoulder (behind body)
+    if hilt: _hilt(d)
+    _ren_body(im, d, expr, mouth, blink, phase)
+    return finish(im)
+
+def _hilt(d):
     poly(d, [(630, 570), (668, 558), (700, 790), (662, 802)], (90, 70, 60))
     poly(d, [(600, 580), (708, 542), (716, 566), (608, 606)], (170, 150, 110))
     ell(d, [632, 518, 676, 562], (0, 200, 230))
+
+def _ren_body(im, d, expr, mouth, blink, phase):
     # back hair mass
     cx, cy = 450, 400; pts = []
     rnd = random.Random(3)
@@ -128,7 +135,6 @@ def ren_bust(expr="calm", mouth=0, blink=False, phase=0):
     poly(d, [(620, 300), (582, 330), (588, 560), (608, 610), (624, 480)], HAIR, ow=4)
     # brows
     brows(d, expr)
-    return finish(im)
 
 def eye(im, ex, ey, side, expr, blink):
     d = ImageDraw.Draw(im)
@@ -273,3 +279,128 @@ def shard(size=300):
     # small side crystal
     d.polygon([(c+s*0.18, c+s*0.2), (c+s*0.42, c-s*0.05), (c+s*0.38, c+s*0.32), (c+s*0.18, c+s*0.45)], fill=(90, 210, 245), outline=(20, 70, 110), width=max(2, s//80))
     return im
+
+# ---------------------------------------------------------------- CAPTAIN MIRE
+MIRE_ARM, MIRE_SH, MIRE_HL = (84, 92, 104), (52, 58, 70), (146, 156, 170)
+MIRE_CLOAK, MIRE_CLOAK_SH = (128, 44, 36), (88, 28, 26)
+MIRE_SKIN, MIRE_SKIN_SH = (222, 178, 146), (186, 136, 112)
+
+def _mire_eye(d, ex, ey, side, blink):
+    if blink:
+        d.line(P([(ex-46, ey+4), (ex, ey+10), (ex+46, ey+2)]), fill=OUT, width=7*SS); return
+    sclera = [(ex - 48*side, ey+6), (ex - 18*side, ey-20), (ex + 30*side, ey-24), (ex + 52*side, ey-10), (ex + 26*side, ey+14), (ex - 20*side, ey+16)]
+    poly(d, sclera, (250, 248, 240), ow=0)
+    ell(d, [ex-20, ey-24, ex+20, ey+16], (214, 170, 60), ow=0)
+    ell(d, [ex-20, ey-24, ex+20, ey-6], (150, 100, 30), ow=0)
+    ell(d, [ex-7, ey-12, ex+7, ey+6], (30, 16, 10), ow=0)
+    ell(d, [ex-15, ey-20, ex-3, ey-9], (255, 255, 255), ow=0)
+    # heavy angled upper lid
+    poly(d, [(ex - 54*side, ey+6), (ex - 18*side, ey-26), (ex + 34*side, ey-32), (ex + 64*side, ey-14), (ex + 50*side, ey-10),
+             (ex + 28*side, ey-22), (ex - 18*side, ey-16), (ex - 46*side, ey+8)], OUT, ow=0)
+    d.line(P([(ex - 20*side, ey+18), (ex + 26*side, ey+16)]), fill=(120, 80, 70), width=3*SS)
+
+@lru_cache(None)
+def mire_bust(mouth=0, blink=False):
+    im = new_layer(); d = ImageDraw.Draw(im)
+    # double-bladed spear behind (shaft + both blade heads)
+    poly(d, [(80, 1560), (110, 1580), (840, 170), (810, 150)], (60, 46, 40))
+    for (bx, by, dx, dy) in ((826, 160, 1, -1), (95, 1570, -1, 1)):
+        poly(d, [(bx - 34*dx, by - 10*dy), (bx + 10*dx, by + 30*dy), (bx + 90*dx, by - 170*dy*-1 if False else by + 30*dy - 0),
+                 ], (0, 0, 0, 0), ow=0)
+    top = [(790, 196), (850, 150), (900, 20), (880, 120), (870, 190), (826, 232)]
+    poly(d, top, (196, 206, 218)); poly(d, [(850, 150), (900, 20), (872, 160)], (150, 160, 176), ow=0)
+    poly(d, [(770, 220), (840, 250), (848, 236), (778, 204)], MIRE_CLOAK, ow=3)
+    # cloak / shoulders
+    poly(d, [(40, 1600), (90, 900), (250, 790), (650, 790), (810, 900), (860, 1600)], MIRE_CLOAK)
+    poly(d, [(520, 790), (650, 790), (810, 900), (860, 1600), (600, 1600)], MIRE_CLOAK_SH, ow=0)
+    # breastplate
+    poly(d, [(250, 850), (650, 850), (690, 1600), (210, 1600)], MIRE_ARM)
+    poly(d, [(450, 850), (650, 850), (690, 1600), (450, 1600)], MIRE_SH, ow=0)
+    poly(d, [(450, 880), (600, 960), (560, 1200), (450, 1260), (340, 1200), (300, 960)], MIRE_HL)
+    poly(d, [(450, 880), (600, 960), (560, 1200), (450, 1260)], MIRE_ARM, ow=0)
+    d.line(P([(450, 880), (450, 1260)]), fill=OUT, width=4*SS)
+    # battle scars on the armor (gouges)
+    for a, b in (((330, 990), (430, 1120)), ((350, 1010), (440, 1140)), ((520, 1250), (640, 1180)), ((600, 1000), (560, 1060))):
+        d.line(P([a, b]), fill=(30, 32, 40), width=6*SS); d.line(P([(a[0]+6, a[1]-6), (b[0]+6, b[1]-6)]), fill=(190, 200, 214), width=2*SS)
+    ell(d, [420, 1290, 480, 1350], (170, 90, 255), ow=4)  # violet emblem
+    # pauldrons with layered plates
+    for s in (-1, 1):
+        cx = 450 + s*260
+        for k, yy in enumerate((860, 920, 980)):
+            poly(d, [(cx - 150*s, yy + 40), (cx - 120*s, yy - 50), (cx + 60*s, yy - 70), (cx + 170*s, yy), (cx + 150*s, yy + 60)],
+                 MIRE_ARM if k % 2 == 0 else MIRE_SH)
+        d.line(P([(cx - 110*s, 840), (cx + 120*s, 820)]), fill=MIRE_HL, width=5*SS)
+    # gorget
+    poly(d, [(340, 680), (560, 680), (610, 860), (290, 860)], MIRE_SH)
+    poly(d, [(340, 680), (450, 680), (450, 860), (290, 860)], MIRE_ARM, ow=0)
+    d.line(P([(320, 770), (580, 770)]), fill=OUT, width=4*SS)
+    # neck + head
+    poly(d, [(400, 560), (500, 560), (504, 690), (396, 690)], MIRE_SKIN_SH)
+    jaw = [(318, 420), (326, 540), (380, 630), (450, 662), (520, 630), (574, 540), (582, 420)]
+    ell(d, [318, 250, 582, 560], MIRE_SKIN, ow=0); poly(d, jaw, MIRE_SKIN, ow=0)
+    poly(d, [(520, 300), (590, 420), (574, 540), (520, 630), (470, 655), (548, 520), (556, 400)], MIRE_SKIN_SH, ow=0)
+    d.line(P(jaw), fill=OUT, width=5*SS, joint="curve")
+    d.line(P([(318, 420), (318, 360)]), fill=OUT, width=5*SS); d.line(P([(582, 420), (582, 360)]), fill=OUT, width=5*SS)
+    # eyes, brows (stern), nose
+    for side, ex in ((-1, 382), (1, 518)):
+        _mire_eye(d, ex, 470, side, blink)
+        poly(d, [(ex - 52*side, 410), (ex + 50*side, 432), (ex + 50*side, 446), (ex - 52*side, 426)], (60, 60, 70), ow=0)
+    d.line(P([(454, 500), (446, 556), (460, 560)]), fill=(150, 100, 86), width=4*SS)
+    # mouth
+    mx, my = 450, 604
+    if mouth == 0:
+        d.line(P([(mx-34, my+4), (mx+30, my)]), fill=(100, 50, 46), width=5*SS)
+    else:
+        w, h = (22, 12) if mouth == 1 else (28, 24)
+        poly(d, [(mx-w-6, my-h*0.3), (mx+w+4, my-h*0.4), (mx+w*0.6, my+h*0.7), (mx-w*0.6, my+h*0.7)], (96, 28, 34), ow=3)
+        d.rectangle(B([mx-w+4, my-h*0.3, mx+w-4, my-h*0.3+6]), fill=(245, 245, 245))
+    # helm: open face, swept-back horns, cheek guards
+    poly(d, [(300, 420), (306, 310), (360, 236), (450, 210), (540, 236), (594, 310), (600, 420), (566, 380), (540, 318), (450, 300), (360, 318), (334, 380)], MIRE_ARM)
+    poly(d, [(450, 210), (540, 236), (594, 310), (600, 420), (566, 380), (540, 318), (450, 300)], MIRE_SH, ow=0)
+    d.line(P([(300, 420), (306, 310), (360, 236), (450, 210), (540, 236), (594, 310), (600, 420)]), fill=OUT, width=5*SS)
+    poly(d, [(360, 318), (450, 300), (540, 318), (548, 342), (450, 326), (352, 342)], MIRE_HL, ow=3)  # brow band
+    for s in (-1, 1):
+        poly(d, [(450 + 150*s, 330), (450 + 158*s, 470), (450 + 120*s, 560), (450 + 136*s, 450), (450 + 128*s, 360)], MIRE_ARM, ow=4)
+        poly(d, [(450 + 120*s, 270), (450 + 230*s, 200), (450 + 330*s, 90), (450 + 250*s, 230), (450 + 150*s, 310)], MIRE_HL, ow=4)
+    # helm scar (deep diagonal gouge)
+    d.line(P([(392, 240), (430, 310)]), fill=(24, 24, 32), width=7*SS)
+    # ash-grey fringe peeking out
+    for x in (366, 404, 440):
+        poly(d, [(x-16, 340), (x+22, 340), (x+4, 392)], (170, 172, 180), ow=3)
+    return finish(im)
+
+# ---------------------------------------------------------------- REN'S BLADE
+def blade_img(length_frac=1.0, broken=False, glow=1.0, scale=1.0):
+    """vertical sword on a 260x1100 canvas, hilt at the bottom. broken=True draws the snapped half-blade.
+    length_frac (0..1) grows the cyan shard-light blade beyond the break when not broken."""
+    w, h = 260, 1100
+    im = Image.new("RGBA", (w*SS, h*SS), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    cx = w/2; guard_y = 860; brk = 560; tip = 60
+    if not broken and length_frac > 0:
+        top = brk - (brk - tip)*length_frac
+        g = Image.new("RGBA", im.size, (0, 0, 0, 0)); gd = ImageDraw.Draw(g)
+        gd.polygon(P([(cx-54, guard_y), (cx+54, guard_y), (cx+50, top+60), (cx, top-30), (cx-50, top+60)]), fill=(60, 220, 255, int(170*glow)))
+        im.alpha_composite(g.filter(ImageFilter.GaussianBlur(26*SS)))
+        d = ImageDraw.Draw(im)
+        # crystal half
+        poly(d, [(cx-26, brk+8), (cx+26, brk-6), (cx+24, top+40), (cx, top), (cx-24, top+40)], (130, 240, 255), ow=4, outline=(20, 70, 110))
+        poly(d, [(cx, brk), (cx+26, brk-6), (cx+24, top+40), (cx, top)], (70, 190, 236), ow=0)
+        poly(d, [(cx-14, brk-10), (cx-6, brk-10), (cx-6, top+60), (cx-12, top+70)], (230, 255, 255), ow=0)
+    # steel lower half
+    poly(d, [(cx-28, guard_y), (cx+28, guard_y), (cx+26, brk-6), (cx+10, brk+14), (cx-2, brk-8), (cx-14, brk+10), (cx-26, brk+4)], (196, 204, 216), ow=4)
+    poly(d, [(cx, guard_y), (cx+28, guard_y), (cx+26, brk-6), (cx+10, brk+14), (cx, brk)], (140, 150, 168), ow=0)
+    d.line(P([(cx, guard_y-10), (cx, brk+20)]), fill=(110, 118, 134), width=3*SS)
+    # crack lines glowing
+    crack_col = (90, 230, 255) if not broken else (60, 60, 74)
+    d.line(P([(cx-6, brk+10), (cx+6, brk+80), (cx-8, brk+150), (cx+4, brk+210)]), fill=crack_col, width=4*SS)
+    d.line(P([(cx+6, brk+80), (cx+18, brk+120)]), fill=crack_col, width=3*SS)
+    # guard with shard socket
+    poly(d, [(cx-110, guard_y-10), (cx+110, guard_y-10), (cx+124, guard_y+18), (cx+90, guard_y+28), (cx-90, guard_y+28), (cx-124, guard_y+18)], (170, 140, 90), ow=4)
+    ell(d, [cx-26, guard_y-20, cx+26, guard_y+34], (90, 230, 255) if not broken else (60, 70, 90), ow=4)
+    # grip + pommel
+    poly(d, [(cx-20, guard_y+28), (cx+20, guard_y+28), (cx+18, 1040), (cx-18, 1040)], (90, 60, 50), ow=4)
+    for y in range(guard_y+44, 1040, 26):
+        d.line(P([(cx-18, y), (cx+18, y+12)]), fill=(60, 40, 34), width=4*SS)
+    ell(d, [cx-30, 1030, cx+30, 1090], (170, 140, 90), ow=4)
+    out = im.resize((int(w*scale), int(h*scale)), Image.LANCZOS)
+    return out
