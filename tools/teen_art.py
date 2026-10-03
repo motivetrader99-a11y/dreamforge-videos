@@ -404,3 +404,103 @@ def blade_img(length_frac=1.0, broken=False, glow=1.0, scale=1.0):
     ell(d, [cx-30, 1030, cx+30, 1090], (170, 140, 90), ow=4)
     out = im.resize((int(w*scale), int(h*scale)), Image.LANCZOS)
     return out
+
+# ---------------------------------------------------------------- HOLLOW SOLDIER (Ep 3+)
+SOL_ARM, SOL_SH, SOL_HL = (58, 54, 78), (34, 30, 50), (112, 106, 140)
+SOL_SMOKE = (20, 10, 32)
+
+@lru_cache(None)
+def hollow_soldier(glow=1.0, phase=0):
+    """full-figure armored shadow on a 420x820 canvas (feet = smoke at the bottom). phase 0..7 animates the smoke."""
+    w, h = 420, 820
+    im = Image.new("RGBA", (w*SS, h*SS), (0, 0, 0, 0))
+    # violet aura
+    g = Image.new("RGBA", im.size, (0, 0, 0, 0)); gd = ImageDraw.Draw(g)
+    gd.ellipse(B([60, 120, 360, 760]), fill=(120, 50, 200, int(90*glow)))
+    im.alpha_composite(g.filter(ImageFilter.GaussianBlur(40*SS)))
+    d = ImageDraw.Draw(im)
+    a = phase/8*2*math.pi
+    # smoky lower body (no legs)
+    smoke = [(120, 470), (300, 470), (320, 600), (300 + 14*math.sin(a), 700), (260, 760 + 20*math.sin(a + 1)), (230, 720),
+             (205, 800 + 14*math.sin(a + 2)), (180, 724), (150, 770 + 18*math.sin(a + 3)), (128, 690), (100 + 12*math.sin(a), 600)]
+    poly(d, smoke, SOL_SMOKE, ow=4)
+    for k in range(3):
+        y = 560 + k*60
+        d.line(P([(140, y), (210, y + 14*math.sin(a + k)), (280, y)]), fill=(60, 30, 90), width=4*SS)
+    # shadow arms
+    poly(d, [(92, 300), (60, 470), (78, 560), (112, 556), (128, 400)], SOL_SMOKE, ow=4)
+    poly(d, [(328, 300), (370, 450), (352, 540), (318, 536), (296, 400)], SOL_SMOKE, ow=4)
+    # shadow staff (violet crystal tip) in the right hand
+    poly(d, [(330, 120), (344, 120), (348, 760), (334, 760)], (40, 30, 50), ow=3)
+    poly(d, [(337, 40), (358, 90), (337, 140), (316, 90)], (190, 120, 255), ow=4)
+    # breastplate
+    poly(d, [(120, 260), (300, 260), (316, 480), (210, 520), (104, 480)], SOL_ARM)
+    poly(d, [(210, 260), (300, 260), (316, 480), (210, 520)], SOL_SH, ow=0)
+    d.line(P([(120, 260), (300, 260), (316, 480), (210, 520), (104, 480), (120, 260)]), fill=OUT, width=4*SS)
+    d.line(P([(130, 360), (210, 390), (296, 360)]), fill=OUT, width=4*SS)
+    d.line(P([(150, 300), (190, 310)]), fill=SOL_HL, width=4*SS)
+    ell(d, [196, 410, 224, 438], (190, 120, 255), ow=3)
+    # pauldrons
+    for s in (-1, 1):
+        cx = 210 + s*110
+        poly(d, [(cx - 70*s, 300), (cx - 50*s, 240), (cx + 30*s, 226), (cx + 70*s, 260), (cx + 62*s, 320), (cx, 330)], SOL_ARM, ow=4)
+        d.line(P([(cx - 40*s, 256), (cx + 40*s, 246)]), fill=SOL_HL, width=4*SS)
+    # helm: tall bucket helm with a T-visor and a fin crest
+    poly(d, [(206, 60), (222, 60), (240, 150), (188, 150)], SOL_HL, ow=4)  # fin
+    poly(d, [(146, 140), (166, 100), (214, 86), (262, 100), (282, 140), (284, 250), (214, 272), (144, 250)], SOL_ARM)
+    poly(d, [(214, 86), (262, 100), (282, 140), (284, 250), (214, 272)], SOL_SH, ow=0)
+    d.line(P([(146, 140), (166, 100), (214, 86), (262, 100), (282, 140), (284, 250), (214, 272), (144, 250), (146, 140)]), fill=OUT, width=4*SS)
+    # glowing T visor
+    vg = Image.new("RGBA", im.size, (0, 0, 0, 0)); vd = ImageDraw.Draw(vg)
+    vd.rectangle(B([160, 160, 268, 196]), fill=(190, 110, 255, int(220*glow))); vd.rectangle(B([200, 160, 228, 250]), fill=(190, 110, 255, int(220*glow)))
+    im.alpha_composite(vg.filter(ImageFilter.GaussianBlur(10*SS)))
+    d = ImageDraw.Draw(im)
+    poly(d, [(166, 168), (262, 168), (262, 188), (226, 188), (226, 244), (202, 244), (202, 188), (166, 188)], (240, 210, 255), ow=0)
+    return im.resize((w, h), Image.LANCZOS)
+
+@lru_cache(None)
+def soldier_helm(size=160):
+    """a dropped, empty soldier helm (for when the shadow scatters)."""
+    im = Image.new("RGBA", (300*SS, 260*SS), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    def Q(pts): return [((x - 70)*SS, (y - 70)*SS) for x, y in pts]
+    pts = [(146, 140), (166, 100), (214, 86), (262, 100), (282, 140), (284, 250), (214, 272), (144, 250)]
+    d.polygon(Q(pts), fill=SOL_ARM, outline=OUT, width=4*SS)
+    d.polygon(Q([(214, 86), (262, 100), (282, 140), (284, 250), (214, 272)]), fill=SOL_SH)
+    d.polygon(Q([(206, 60), (222, 60), (240, 150), (188, 150)]), fill=SOL_HL, outline=OUT, width=4*SS)
+    d.polygon(Q([(166, 168), (262, 168), (262, 188), (226, 188), (226, 244), (202, 244), (202, 188), (166, 188)]), fill=(16, 10, 24))
+    im = im.resize((300, 260), Image.LANCZOS)
+    return im.resize((int(300*size/160), int(260*size/160)), Image.LANCZOS)
+
+# ---------------------------------------------------------------- AIRSHIP SILHOUETTE (original)
+@lru_cache(None)
+def airship(lit=1.0, prop=0):
+    w, h = 900, 520
+    im = Image.new("RGBA", (w*SS, h*SS), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    dark, mid = (30, 34, 52), (52, 60, 84)
+    # envelope
+    poly(d, [(110, 150), (230, 70), (560, 50), (760, 100), (840, 170), (760, 240), (560, 280), (230, 270), (110, 200)], mid)
+    poly(d, [(110, 190), (230, 270), (560, 280), (760, 240), (840, 170), (760, 200), (560, 230), (230, 220)], dark, ow=0)
+    for x in (300, 430, 560, 680):
+        d.line(P([(x, 62), (x - 6, 276)]), fill=(24, 26, 40), width=4*SS)
+    # swept tail fins (wing-like)
+    poly(d, [(150, 140), (30, 60), (70, 150), (20, 230), (150, 200)], (80, 50, 40))
+    # rigging + gondola hull
+    for x in (330, 470, 610):
+        d.line(P([(x, 270), (x + 10, 350)]), fill=(20, 20, 30), width=3*SS)
+    poly(d, [(250, 350), (700, 350), (740, 372), (690, 440), (300, 440), (240, 390)], (96, 60, 40))
+    poly(d, [(300, 410), (690, 410), (690, 440), (300, 440)], (70, 44, 30), ow=0)
+    d.line(P([(250, 350), (700, 350), (740, 372)]), fill=(200, 160, 90), width=4*SS)
+    # windows
+    for x in (340, 410, 480, 550, 620):
+        ell(d, [x, 368, x + 34, 400], (int(80 + 175*lit), int(70 + 130*lit), int(50 + 40*lit)), ow=3)
+    # propellers (side pods)
+    for px in (200, 760):
+        poly(d, [(px - 40, 330), (px + 40, 330), (px + 30, 370), (px - 30, 370)], (80, 84, 100), ow=4)
+        ang = prop*math.pi/4
+        for k in range(3):
+            a2 = ang + k*2*math.pi/3
+            poly(d, [(px, 350), (px + 70*math.cos(a2) - 10*math.sin(a2), 350 + 22*math.sin(a2)), (px + 70*math.cos(a2) + 10*math.sin(a2), 350 + 22*math.sin(a2) + 8)],
+                 (150, 150, 170), ow=2)
+    # bow lamp
+    ell(d, [730, 356, 760, 386], (255, 230, 150), ow=3)
+    return im.resize((w, h), Image.LANCZOS)
