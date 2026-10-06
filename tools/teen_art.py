@@ -136,27 +136,28 @@ def _ren_body(im, d, expr, mouth, blink, phase):
     # brows
     brows(d, expr)
 
-def eye(im, ex, ey, side, expr, blink):
+def eye(im, ex, ey, side, expr, blink, iris=None, iris_d=None, iris_hl=(250, 196, 110), lid=None):
+    iris = iris or IRIS; iris_d = iris_d or IRIS_D; lid = lid or SKIN_SH
     d = ImageDraw.Draw(im)
     if blink:
         d.line(P([(ex-52, ey+8), (ex, ey+16), (ex+52, ey+8)]), fill=OUT, width=7*SS, joint="curve")
         return
-    hgt = {"calm": 40, "shocked": 50, "determined": 32}[expr]
+    hgt = {"calm": 40, "shocked": 50, "determined": 32, "smirk": 34}[expr]
     layer = Image.new("RGBA", im.size, (0, 0, 0, 0)); ld = ImageDraw.Draw(layer)
     m = Image.new("L", im.size, 0); md = ImageDraw.Draw(m)
     sclera = [(ex-54, ey), (ex-30, ey-hgt), (ex+30, ey-hgt-4*side), (ex+56, ey-4), (ex+30, ey+hgt*0.9), (ex-30, ey+hgt*0.9)]
     md.polygon(P(sclera), fill=255)
     ld.polygon(P(sclera), fill=(255, 255, 255))
     ir = 22 if expr == "shocked" else 32
-    ld.ellipse(B([ex-ir, ey-44, ex+ir, ey+44]), fill=IRIS)
-    ld.ellipse(B([ex-ir, ey-44, ex+ir, ey+4]), fill=IRIS_D)
-    ld.ellipse(B([ex-ir*0.9, ey-10, ex+ir*0.9, ey+44]), fill=IRIS)
+    ld.ellipse(B([ex-ir, ey-44, ex+ir, ey+44]), fill=iris)
+    ld.ellipse(B([ex-ir, ey-44, ex+ir, ey+4]), fill=iris_d)
+    ld.ellipse(B([ex-ir*0.9, ey-10, ex+ir*0.9, ey+44]), fill=iris)
     ld.ellipse(B([ex-ir*0.45, ey-18, ex+ir*0.45, ey+18]), fill=(50, 20, 10))
-    ld.ellipse(B([ex-ir*0.7, ey+14, ex+ir*0.7, ey+40]), fill=(250, 196, 110))
+    ld.ellipse(B([ex-ir*0.7, ey+14, ex+ir*0.7, ey+40]), fill=iris_hl)
     ld.ellipse(B([ex-ir*0.85, ey-36, ex-ir*0.15, ey-12]), fill=(255, 255, 255))
     ld.ellipse(B([ex+ir*0.25, ey+16, ex+ir*0.55, ey+28]), fill=(255, 255, 255))
     if expr == "determined":
-        ld.polygon(P([(ex-60, ey-60), (ex+60, ey-60), (ex+60, ey-hgt+14 + (10 if side < 0 else -10)*-1), (ex-60, ey-hgt+14 + (10 if side < 0 else -10))]), fill=SKIN_SH)
+        ld.polygon(P([(ex-60, ey-60), (ex+60, ey-60), (ex+60, ey-hgt+14 + (10 if side < 0 else -10)*-1), (ex-60, ey-hgt+14 + (10 if side < 0 else -10))]), fill=lid)
     im.paste(layer, (0, 0), ImageChops.multiply(m, layer.split()[3]))
     d = ImageDraw.Draw(im)
     # upper lash (thick) with outer flick
@@ -504,3 +505,125 @@ def airship(lit=1.0, prop=0):
     # bow lamp
     ell(d, [730, 356, 760, 386], (255, 230, 150), ow=3)
     return im.resize((w, h), Image.LANCZOS)
+
+# ---------------------------------------------------------------- LYRA VELL (Ep 4+)
+LY_HAIR, LY_HAIR_SH, LY_HAIR_HL = (208, 214, 230), (146, 152, 182), (248, 250, 255)
+LY_JACKET, LY_JACKET_SH, LY_JACKET_HL = (124, 76, 44), (86, 50, 30), (164, 108, 66)
+BRASS, BRASS_SH = (206, 166, 82), (150, 112, 48)
+LY_IRIS, LY_IRIS_D, LY_IRIS_HL = (44, 176, 168), (16, 92, 100), (150, 236, 214)
+
+def gear(d, cx, cy, r, teeth=8, col=BRASS):
+    pts = []
+    for i in range(teeth*2):
+        a = math.pi*i/teeth; rr = r if i % 2 == 0 else r*0.74
+        pts.append((cx + rr*math.cos(a), cy + rr*math.sin(a)))
+    poly(d, pts, col, ow=3)
+    ell(d, [cx - r*0.3, cy - r*0.3, cx + r*0.3, cy + r*0.3], LY_JACKET_SH, ow=2)
+
+@lru_cache(None)
+def lyra_bust(expr="smirk", mouth=0, blink=False, goggles_down=False):
+    im = new_layer(); d = ImageDraw.Draw(im)
+    # back hair: silver bob, chin length
+    poly(d, [(268, 330), (290, 220), (370, 160), (450, 145), (530, 160), (610, 220), (632, 330), (640, 560), (650, 660),
+             (590, 640), (560, 600), (340, 600), (310, 640), (250, 660), (260, 560)], LY_HAIR)
+    poly(d, [(560, 600), (590, 640), (650, 660), (640, 560), (632, 330), (600, 360)], LY_HAIR_SH, ow=0)
+    # jacket
+    poly(d, [(60, 1600), (96, 900), (230, 790), (670, 790), (804, 900), (840, 1600)], LY_JACKET)
+    poly(d, [(560, 805), (670, 790), (804, 900), (840, 1600), (640, 1600)], LY_JACKET_SH, ow=0)
+    poly(d, [(96, 900), (230, 790), (262, 812), (136, 930)], LY_JACKET_HL, ow=0)
+    # shirt V + lapels
+    poly(d, [(372, 780), (528, 780), (450, 1060)], (232, 222, 200))
+    poly(d, [(330, 780), (372, 780), (450, 1060), (420, 1120), (300, 900)], LY_JACKET_HL)
+    poly(d, [(570, 780), (528, 780), (450, 1060), (480, 1120), (600, 900)], LY_JACKET)
+    d.line(P([(450, 1120), (450, 1600)]), fill=OUT, width=5*SS)
+    # stitched seams + brass buttons/gears
+    for x0, x1 in ((180, 230), (720, 670)):
+        d.line(P([(x0, 1000), (x1, 1500)]), fill=LY_JACKET_SH, width=4*SS)
+    gear(d, 360, 930, 34, 8); gear(d, 330, 1000, 22, 6)
+    gear(d, 700, 1000, 46, 10, BRASS_SH)
+    for y in (1200, 1300, 1400):
+        ell(d, [480, y, 506, y + 26], BRASS, ow=3)
+    # shoulder strap with tool pouch
+    poly(d, [(620, 800), (660, 790), (220, 1600), (170, 1600)], (70, 46, 30))
+    poly(d, [(330, 1300), (430, 1300), (424, 1420), (336, 1420)], (96, 62, 38))
+    d.line(P([(330, 1330), (430, 1330)]), fill=OUT, width=4*SS)
+    # neck
+    poly(d, [(400, 520), (500, 520), (506, 790), (394, 790)], SKIN)
+    # shirt collar + raised jacket collar
+    poly(d, [(330, 800), (360, 700), (450, 760), (540, 700), (570, 800)], (232, 222, 200))
+    poly(d, [(250, 800), (300, 680), (360, 700), (340, 800)], LY_JACKET_HL)
+    poly(d, [(650, 800), (600, 680), (540, 700), (560, 800)], LY_JACKET)
+    poly(d, [(400, 530), (500, 530), (500, 610), (400, 580)], SKIN_SH, ow=0)
+    # ears (mostly hidden) + head
+    cran, jaw = head_shape()
+    hm = Image.new("L", im.size, 0); hd = ImageDraw.Draw(hm)
+    hd.ellipse(B(cran), fill=255); hd.polygon(P(jaw), fill=255)
+    im.paste(Image.new("RGBA", im.size, SKIN + (255,)), (0, 0), hm)
+    sh = Image.new("L", im.size, 0); sd = ImageDraw.Draw(sh)
+    sd.polygon(P([(545, 200), (620, 300), (620, 560), (528, 640), (450, 668), (560, 520), (575, 380)]), fill=255)
+    sd.polygon(P([(290, 300), (610, 300), (610, 400), (290, 420)]), fill=255)
+    sh = ImageChops.multiply(sh, hm)
+    im.paste(Image.new("RGBA", im.size, SKIN_SH + (255,)), (0, 0), sh)
+    d = ImageDraw.Draw(im)
+    d.line(P(jaw), fill=OUT, width=5*SS, joint="curve")
+    for ex in (360, 540):
+        ell(d, [ex - 30, 562, ex + 30, 580], (255, 176, 170), ow=0)
+    if expr == "smirk":
+        e2 = "smirk"
+    else:
+        e2 = expr
+    for side, ex in ((-1, 370), (1, 530)):
+        eye(im, ex, 482, side, e2 if e2 != "smirk" else "calm", blink, LY_IRIS, LY_IRIS_D, LY_IRIS_HL)
+    d = ImageDraw.Draw(im)
+    if expr == "smirk" and not blink:  # relaxed half-lids
+        for side, ex in ((-1, 370), (1, 530)):
+            poly(d, [(ex - 58, 440), (ex + 58, 440), (ex + 58, 462), (ex - 58, 462)], SKIN_SH, ow=0)
+            d.line(P([(ex - 56, 464), (ex + 56, 460)]), fill=OUT, width=7*SS)
+    d.line(P([(458, 548), (450, 574), (462, 576)]), fill=(190, 130, 120), width=4*SS)
+    # mouth
+    mx, my = 450, 618
+    if mouth == 0:
+        if expr == "smirk":
+            d.line(P([(mx - 28, my + 2), (mx + 6, my + 4), (mx + 30, my - 10)]), fill=(120, 50, 56), width=5*SS)
+        elif expr == "shocked":
+            ell(d, [mx - 12, my - 8, mx + 12, my + 12], (110, 30, 40), ow=3)
+        else:
+            d.line(P([(mx - 24, my), (mx, my + 6), (mx + 24, my)]), fill=(120, 50, 56), width=4*SS)
+    else:
+        w = {1: 20, 2: 28}[mouth]; h = {1: 12, 2: 26}[mouth]
+        if expr == "smirk":
+            poly(d, [(mx - w, my - h*0.2), (mx + w + 8, my - h*0.6), (mx + w*0.6, my + h*0.8), (mx - w*0.5, my + h*0.6)], (110, 30, 40), ow=3)
+            d.rectangle(B([mx - w + 6, my - h*0.3, mx + w - 2, my - h*0.3 + 6]), fill=(255, 255, 255))
+        else:
+            ell(d, [mx - w, my - h*0.6, mx + w, my + h], (110, 30, 40), ow=3)
+            ell(d, [mx - w*0.6, my + h*0.2, mx + w*0.6, my + h*0.95], (230, 120, 130), ow=0)
+    # side locks of the bob framing the face
+    poly(d, [(282, 300), (330, 330), (328, 520), (346, 640), (300, 660), (266, 600), (270, 450)], LY_HAIR, ow=4)
+    poly(d, [(618, 300), (570, 330), (572, 520), (556, 640), (602, 660), (634, 600), (630, 450)], LY_HAIR, ow=4)
+    poly(d, [(600, 340), (580, 360), (582, 540), (600, 640), (624, 610)], LY_HAIR_SH, ow=0)
+    # swept bangs (long over her right eye -> viewer's left)
+    poly(d, [(282, 300), (296, 230), (370, 180), (450, 168), (540, 180), (604, 230), (618, 300),
+             (606, 340), (584, 404), (556, 356), (516, 412), (484, 350), (440, 424), (396, 446), (334, 452), (300, 412)], LY_HAIR, ow=4)
+    poly(d, [(330, 300), (420, 290), (400, 380), (340, 420)], LY_HAIR_SH, ow=0)
+    poly(d, [(330, 214), (390, 188), (460, 180), (540, 190), (580, 214), (540, 210), (460, 198), (390, 204)], LY_HAIR_HL, ow=0)
+    # brows (thin, one raised when smirking)
+    for side, ex in ((-1, 370), (1, 530)):
+        if expr == "smirk":
+            inner, outer = ((ex - 40*side, 412), (ex + 46*side, 404)) if side < 0 else ((ex - 40*side, 396), (ex + 46*side, 384))
+        elif expr == "shocked":
+            inner, outer = (ex - 40*side, 384), (ex + 46*side, 388)
+        else:
+            inner, outer = (ex - 40*side, 410), (ex + 46*side, 402)
+        if side < 0 and expr != "shocked":
+            continue  # left brow hidden under the long bangs
+        poly(d, [inner, outer, (outer[0], outer[1] + 9), (inner[0], inner[1] + 10)], (110, 112, 140), ow=0)
+    # goggles pushed up on her head
+    gy = 220 if not goggles_down else 482
+    poly(d, [(276, gy + 10), (624, gy + 10), (630, gy + 46), (270, gy + 46)], (64, 42, 30), ow=4)
+    for gx in (385, 515):
+        ell(d, [gx - 62, gy - 34, gx + 62, gy + 90], BRASS, ow=5)
+        ell(d, [gx - 44, gy - 16, gx + 44, gy + 72], (70, 190, 204), ow=4)
+        ell(d, [gx - 30, gy - 6, gx - 4, gy + 20], (230, 255, 255), ow=0)
+        d.line(P([(gx + 12, gy + 50), (gx + 30, gy + 30)]), fill=(200, 250, 255), width=4*SS)
+    poly(d, [(447, gy + 14), (453, gy + 14), (453, gy + 40), (447, gy + 40)], BRASS_SH, ow=3)
+    return finish(im)
