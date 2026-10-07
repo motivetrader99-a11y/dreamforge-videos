@@ -627,3 +627,114 @@ def lyra_bust(expr="smirk", mouth=0, blink=False, goggles_down=False):
         d.line(P([(gx + 12, gy + 50), (gx + 30, gy + 30)]), fill=(200, 250, 255), width=4*SS)
     poly(d, [(447, gy + 14), (453, gy + 14), (453, gy + 40), (447, gy + 40)], BRASS_SH, ow=3)
     return finish(im)
+
+# ---------------------------------------------------------------- KURO (three-tailed fox spirit)
+KU_FUR, KU_FUR_SH, KU_FUR_HL = (36, 36, 52), (20, 20, 32), (74, 80, 112)
+KU_FLAME, KU_FLAME_C = (50, 130, 255), (190, 230, 255)
+KU_IRIS, KU_IRIS_D = (80, 190, 255), (30, 80, 200)
+KW = 900  # square canvas
+
+def _tail_poly(base, ctrl, tip, w0, w1, n=18):
+    """tapered curved tail along a quadratic bezier."""
+    pts_c = []
+    for i in range(n + 1):
+        t = i/n
+        x = (1-t)**2*base[0] + 2*(1-t)*t*ctrl[0] + t*t*tip[0]
+        y = (1-t)**2*base[1] + 2*(1-t)*t*ctrl[1] + t*t*tip[1]
+        pts_c.append((x, y))
+    L, R = [], []
+    for i, (x, y) in enumerate(pts_c):
+        x2, y2 = pts_c[min(n, i + 1)]; x1, y1 = pts_c[max(0, i - 1)]
+        dx, dy = x2 - x1, y2 - y1; ln = math.hypot(dx, dy) or 1
+        nx, ny = -dy/ln, dx/ln; t = i/n
+        w = (w0*(1 - t) + w1*t)*(1 + 0.35*math.sin(math.pi*t))
+        L.append((x + nx*w, y + ny*w)); R.append((x - nx*w, y - ny*w))
+    return L + R[::-1], pts_c[-1]
+
+def _flame(d, x, y, s, ph, k):
+    """flickering blue flame tongue pointing up at (x,y)."""
+    f = 1 + 0.18*math.sin(ph*2*math.pi + k)
+    poly(d, [(x - 34*s, y + 10*s), (x - 26*s, y - 40*s*f), (x - 6*s, y - 30*s), (x + 4*s, y - 92*s*f),
+             (x + 18*s, y - 34*s), (x + 32*s, y - 56*s*f), (x + 36*s, y + 10*s), (x, y + 36*s)], KU_FLAME, ow=3, outline=(20, 50, 140))
+    poly(d, [(x - 16*s, y + 8*s), (x - 8*s, y - 22*s), (x + 4*s, y - 52*s*f), (x + 14*s, y - 16*s), (x + 18*s, y + 10*s), (x, y + 22*s)], KU_FLAME_C, ow=0)
+
+@lru_cache(None)
+def kuro(mouth=0, blink=False, phase=0, eyes="calm", tails=3):
+    """Kuro sitting, facing viewer. 900x900 RGBA; face centre ~ (450,360). phase 0..7 animates flames."""
+    im = Image.new("RGBA", (KW*SS, KW*SS), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    ph = phase/8.0
+    sw = math.sin(ph*2*math.pi)
+    tail_specs = [((520, 760), (760, 760), (800, 470 + 20*sw)), ((470, 780), (700, 560), (640, 300 + 16*sw)),
+                  ((420, 780), (160, 760), (130, 470 - 20*sw))][:tails]
+    tips = []
+    for k, (b, c, tp) in enumerate(tail_specs):
+        pts, tip = _tail_poly(b, c, tp, 30, 58)
+        poly(d, pts, KU_FUR, ow=5); tips.append(tip)
+        # light streak down the tail
+        inner, _ = _tail_poly((b[0] - 14, b[1] - 10), (c[0] - 14, c[1] - 14), (tp[0] - 12, tp[1] + 10), 5, 14)
+        poly(d, inner[:len(inner)//2] + inner[len(inner)//2:], KU_FUR_HL, ow=0)
+    for k, (x, y) in enumerate(tips):
+        ell(d, [x - 46, y - 46, x + 46, y + 46], (40, 110, 240), ow=4, outline=(20, 50, 140))
+        _flame(d, x, y - 20, 1.25, ph, k*2.1)
+    # body (sitting)
+    poly(d, [(320, 840), (330, 650), (370, 520), (450, 480), (530, 520), (570, 650), (580, 840)], KU_FUR)
+    poly(d, [(520, 520), (570, 650), (580, 840), (520, 840), (540, 650)], KU_FUR_SH, ow=0)
+    # chest fluff
+    poly(d, [(380, 520), (520, 520), (500, 600), (480, 580), (460, 650), (440, 590), (420, 640), (400, 580)], KU_FUR_HL, ow=3)
+    # front legs + paws
+    for lx in (395, 505):
+        poly(d, [(lx - 32, 640), (lx + 32, 640), (lx + 30, 830), (lx - 30, 830)], KU_FUR, ow=5)
+        ell(d, [lx - 46, 800, lx + 46, 856], KU_FUR, ow=5)
+        for tx in (-16, 0, 16): d.line(P([(lx + tx, 820), (lx + tx, 852)]), fill=OUT, width=3*SS)
+    # ears (behind head), blue inner
+    for s in (-1, 1):
+        ex = 450 + s*100
+        poly(d, [(ex - 70*s*-1 if False else ex - 60, 300), (ex + 8*s, 120), (ex + 60, 300)], KU_FUR)
+        poly(d, [(ex - 32, 286), (ex + 6*s, 170), (ex + 32, 286)], (40, 100, 220), ow=0)
+        poly(d, [(ex - 16, 280), (ex + 4*s, 210), (ex + 16, 280)], (120, 190, 255), ow=0)
+    # head: fluffy cheeks, tapering snout
+    head = [(300, 330), (330, 250), (400, 220), (500, 220), (570, 250), (600, 330), (630, 400), (580, 410),
+            (540, 450), (470, 520), (450, 528), (430, 520), (360, 450), (320, 410), (270, 400)]
+    poly(d, head, KU_FUR)
+    poly(d, [(540, 250), (600, 330), (630, 400), (580, 410), (540, 450), (520, 420), (560, 340)], KU_FUR_SH, ow=0)
+    poly(d, [(360, 236), (420, 222), (440, 236), (380, 260)], KU_FUR_HL, ow=0)
+    # muzzle lighter
+    poly(d, [(400, 410), (500, 410), (474, 500), (450, 512), (426, 500)], (56, 58, 80), ow=0)
+    # forehead blue flame mark
+    poly(d, [(450, 250), (464, 290), (450, 320), (436, 290)], (90, 170, 255), ow=0)
+    # eyes: sharp almond, slanted up
+    for s in (-1, 1):
+        ex, ey = 450 + s*72, 360
+        if blink:
+            d.line(P([(ex - 40, ey + 2), (ex, ey + 10), (ex + 40, ey - 6*s*-1 if False else ey - 2)]), fill=(140, 200, 255), width=6*SS)
+            continue
+        hg = 28 if eyes == "calm" else (36 if eyes == "wide" else 20)
+        al = [(ex - 46*s, ey + 8), (ex - 10*s, ey - hg + 4), (ex + 36*s, ey - hg - 8), (ex + 50*s, ey - 16), (ex + 10*s, ey + hg*0.7)]
+        poly(d, al, (235, 245, 255), ow=0)
+        ell(d, [ex - 18, ey - 30, ex + 18, ey + 18], KU_IRIS, ow=0)
+        ell(d, [ex - 18, ey - 30, ex + 18, ey - 8], KU_IRIS_D, ow=0)
+        poly(d, [(ex, ey - 26), (ex + 6, ey - 4), (ex, ey + 14), (ex - 6, ey - 4)], (10, 20, 50), ow=0)  # slit pupil
+        ell(d, [ex - 14, ey - 26, ex - 2, ey - 14], (255, 255, 255), ow=0)
+        ell(d, [ex + 6, ey + 2, ex + 12, ey + 8], (255, 255, 255), ow=0)
+        d.line(P([al[0], al[1], al[2], al[3]]), fill=(6, 6, 12), width=7*SS, joint="curve")
+        if eyes == "narrow":
+            poly(d, [(ex - 50*s, ey - 40), (ex + 54*s, ey - 46), (ex + 50*s, ey - 18), (ex - 46*s, ey - 6)], KU_FUR, ow=0)
+    # nose + mouth
+    ell(d, [432, 478, 468, 500], (8, 8, 14), ow=0)
+    ell(d, [440, 481, 452, 488], (120, 130, 170), ow=0)
+    if mouth == 0:
+        d.line(P([(450, 500), (450, 510), (432, 518)]), fill=OUT, width=4*SS)
+        d.line(P([(450, 510), (468, 518)]), fill=OUT, width=4*SS)
+    else:
+        h = 14 if mouth == 1 else 26
+        poly(d, [(426, 508), (474, 508), (462, 512 + h), (438, 512 + h)], (70, 20, 40), ow=3)
+        ell(d, [440, 506 + h*0.6, 460, 514 + h], (220, 110, 140), ow=0)
+    # whisker-like cheek tufts
+    for s in (-1, 1):
+        poly(d, [(450 + s*150, 400), (450 + s*196, 404), (450 + s*160, 420)], KU_FUR, ow=3)
+    out = im.resize((KW, KW), Image.LANCZOS)
+    # blue rim glow so the black fox reads on dark backgrounds
+    a = out.split()[3]
+    glow = Image.new("RGBA", out.size, (60, 140, 255, 0)); glow.putalpha(a.filter(ImageFilter.GaussianBlur(14)).point(lambda v: int(v*0.9)))
+    res = Image.new("RGBA", out.size, (0, 0, 0, 0)); res.alpha_composite(glow); res.alpha_composite(out)
+    return res
