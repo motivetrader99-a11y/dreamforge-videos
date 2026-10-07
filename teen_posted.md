@@ -7,4 +7,4 @@
 | 2026-10-03 22:31 | Ep 3: Hollow Soldiers | teen/03_hollow_soldiers.mp4 | no | 387395138 |
 | 2026-10-04 22:16 | Lore: Who is Ren Asaka? | teen/lore01_who_is_ren_asaka.mp4 | no | 387891617 |
 | 2026-10-06 16:26 | Ep 4: Lyra's Airship | teen/04_lyras_airship.mp4 | no | 389339672 |
-| 2026-10-08 00:37 | Ep 5: The Fox in the Engine | teen/05_the_fox_in_the_engine.mp4 | no | |
+| 2026-10-08 00:37 | Ep 5: The Fox in the Engine | teen/05_the_fox_in_the_engine.mp4 | no | 390610188 |
