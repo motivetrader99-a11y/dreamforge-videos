@@ -8,4 +8,4 @@
 | 2026-10-04 22:16 | Lore: Who is Ren Asaka? | teen/lore01_who_is_ren_asaka.mp4 | no | 387891617 |
 | 2026-10-06 16:26 | Ep 4: Lyra's Airship | teen/04_lyras_airship.mp4 | no | 389339672 |
 | 2026-10-08 00:37 | Ep 5: The Fox in the Engine | teen/05_the_fox_in_the_engine.mp4 | no | 390610188 |
-| 2026-10-11 20:35 | Ep 6: Chain-Bridge Chase | teen/06_chain_bridge_chase.mp4 | no |  |
+| 2026-10-11 20:35 | Ep 6: Chain-Bridge Chase | teen/06_chain_bridge_chase.mp4 | no | 393330779 |
