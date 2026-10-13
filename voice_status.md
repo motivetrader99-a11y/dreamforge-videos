@@ -1,1 +1,1 @@
-disabled until 2026-10-12 20:24 IST: ElevenLabs speech generated OK but the audio file could not be downloaded (storage.googleapis.com still blocked by the sandbox egress proxy, CONNECT 403) — allowlist storage.googleapis.com to enable voice
+disabled until 2026-10-14 16:16 IST: pre-check showed storage.googleapis.com (where ElevenLabs audio is downloaded from) still blocked by the sandbox egress proxy (CONNECT 403), so speech generation was skipped to save credits — allowlist storage.googleapis.com to enable voice
