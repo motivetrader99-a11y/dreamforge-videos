@@ -10,3 +10,4 @@
 | 2026-10-08 00:37 | Ep 5: The Fox in the Engine | teen/05_the_fox_in_the_engine.mp4 | no | 390610188 |
 | 2026-10-11 20:35 | Ep 6: Chain-Bridge Chase | teen/06_chain_bridge_chase.mp4 | no | 393330779 |
 | 2026-10-13 16:16 | Lore: The Shattered Skies Explained | teen/lore02_the_shattered_skies_explained.mp4 | no | 394816595 |
+| 2026-10-14 15:58 | Ep 7: Into the Cloud Sea | teen/07_into_the_cloud_sea.mp4 | no | |
