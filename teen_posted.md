@@ -12,4 +12,4 @@
 | 2026-10-13 16:16 | Lore: The Shattered Skies Explained | teen/lore02_the_shattered_skies_explained.mp4 | no | 394816595 |
 | 2026-10-14 15:58 | Ep 7: Into the Cloud Sea | teen/07_into_the_cloud_sea.mp4 | no | 395742319 |
 | 2026-10-14 17:33 | Ep 8: The Drowned Island | teen/08_the_drowned_island.mp4 | no | 395819998 |
-| 2026-10-15 23:22 | Ep 9: The First Memory | teen/09_the_first_memory.mp4 | no |  |
+| 2026-10-15 23:22 | Ep 9: The First Memory | teen/09_the_first_memory.mp4 | no | 397069478 |
