@@ -1,6 +1,6 @@
 # CHIKU & GOLA — original cute-couple romance comedy (from 2026-10-14)
 
-Runs in rotation with SKYFORGE SAGA on the same channel (see "Rotation" below).
+The channel's main series from 2026-10-18 (Skyforge Saga paused).
 Audience: teens 13+, NOT made for kids. Tone: sweet, funny, relatable couple moments —
 jealousy, silly fights, sulking, making up, big love. Every Short ends warm (or on a cute cliffhanger).
 
@@ -49,9 +49,6 @@ style synth loop, with a sad slow piano-ish version for sulky moments.
 - Ep 11: Nani's Advice — after a big fight, both visit Nani the tortoise separately
 - Ep 12: Our Song — Gola practises the tap-tap dance in secret for Chiku's birthday
 
-## Rotation with SKYFORGE SAGA (rows of teen_posted.md count for both series)
-Let n = (number of data rows in teen_posted.md) + 1:
-- n multiple of 4 → next Skyforge "Lore" Short (teens.md)
-- n ≡ 2 (mod 4)  → next CHIKU & GOLA episode (this file), file couple/<NN>_<snake_title>.mp4
-- n odd          → next SKYFORGE SAGA episode (teens.md), file teen/<NN>_<snake_title>.mp4
-In teen_posted.md, write couple rows as "C&G Ep N: <title>".
+## Channel status (from 2026-10-18)
+The channel now posts ONLY this series (Skyforge Saga is paused after Lore #3; teens.md kept for reference).
+Log every video in couple_posted.md. Files: couple/<NN>_<snake_title>.mp4.
