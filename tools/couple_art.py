@@ -506,3 +506,134 @@ def fx_layer():
     return Image.new("RGBA", (W*SS, H*SS), (0, 0, 0, 0))
 
 def fx_done(L): return L.resize((W, H), Image.LANCZOS)
+
+
+# ------------------------------------------------------------------ FIZZ (show-off parrot, side character; added Ep 2)
+F_BLUE, F_BLUE_SH, F_BELLY = (44, 140, 226), (30, 108, 196), (150, 220, 246)
+F_TEAL, F_GOLD, F_BEAK, F_BEAK_SH = (40, 200, 186), (255, 214, 80), (255, 176, 60), (226, 132, 36)
+
+@lru_cache(None)
+def fizz(expr="smug", mouth=0, wings="fold", fan=0.0, blink=False):
+    """Fizz the parrot: round peacock-blue chibi bird, 3 curly teal crest feathers with gold tips,
+    long-lashed smug eyes, orange hooked beak, show-off tail fan (fan 0..1). Same logical canvas as Chiku/Gola."""
+    im = new_layer(); d = ImageDraw.Draw(im)
+    # tail feathers: tucked (fan=0) -> spread behind like a show-off fan (fan=1)
+    n = 7
+    for k in range(n):
+        a0 = math.radians(90 + (k - (n-1)/2)*10)
+        a1 = math.radians(-90 + (k - (n-1)/2)*24)
+        a1 = math.radians(-90 + (k - (n-1)/2)*16)
+        a = a0 + (a1 - a0)*fan
+        ln = 150 + 180*fan
+        cx, cy = 260, 500 + 60*(1 - fan)
+        tip = (cx + ln*math.cos(a), cy + ln*math.sin(a))
+        mid = (cx + ln*0.5*math.cos(a), cy + ln*0.5*math.sin(a))
+        poly(d, tube([ (cx, cy), mid, tip ], 26, 56 if fan > 0.3 else 34), F_BLUE if k % 2 else F_TEAL)
+    # wings behind body when fanned
+    if wings == "fan":
+        poly(d, rot_ellipse(118, 430, 46, 92, 55), F_BLUE); poly(d, rot_ellipse(402, 430, 46, 92, -55), F_BLUE)
+    # body + feet
+    ell(d, [150, 400, 370, 676], F_BLUE)
+    for fx in (220, 300):
+        poly(d, [(fx-30, 690), (fx-10, 650), (fx+10, 650), (fx+30, 690)], F_BEAK)
+    im = outline_under(im, 9); d = ImageDraw.Draw(im)
+    # tail eye-spots (gold + teal) on fan tips
+    if fan > 0.3:
+        for k in range(n):
+            a0 = math.radians(90 + (k - (n-1)/2)*10); a1 = math.radians(-90 + (k - (n-1)/2)*16)
+            a = a0 + (a1 - a0)*fan; ln = (150 + 180*fan)*0.9
+            x, y = 260 + ln*math.cos(a), 500 + 60*(1 - fan) + ln*math.sin(a)
+            if y < 400:
+                ell(d, [x-17, y-17, x+17, y+17], F_GOLD, ow=3.5); ell(d, [x-8, y-8, x+8, y+8], F_TEAL)
+    ell(d, [196, 470, 324, 664], F_BELLY)
+    for fx in (220, 300):
+        poly(d, [(fx-30, 690), (fx-10, 650), (fx+10, 650), (fx+30, 690)], F_BEAK, ow=4)
+    # head + crest
+    head = Image.new("RGBA", im.size, (0, 0, 0, 0)); hd = ImageDraw.Draw(head)
+    for k, (bx, by_, ex, ey) in enumerate(((236, 190, 170, 70), (260, 180, 268, 40), (284, 190, 356, 74))):
+        c = bez((bx, by_), ((bx+ex)/2 + (k-1)*-30, (by_+ey)/2 - 20), (ex, ey), 20)
+        poly(hd, tube(c, 30, 22), F_TEAL)
+        ell(hd, [ex-18, ey-18, ex+18, ey+18], F_GOLD)
+    ell(hd, [120, 160, 400, 430], F_BLUE)
+    head = outline_under(head, 5)
+    im.alpha_composite(head); d = ImageDraw.Draw(im)
+    ell(d, [168, 300, 352, 424], F_BELLY)          # pale face patch
+    # wings in front (folded / one wing pointing up)
+    if wings == "fold":
+        poly(d, rot_ellipse(160, 540, 36, 74, 14), F_BLUE_SH, ow=5); poly(d, rot_ellipse(360, 540, 36, 74, -14), F_BLUE_SH, ow=5)
+    elif wings == "point":
+        poly(d, rot_ellipse(160, 540, 36, 74, 14), F_BLUE_SH, ow=5); poly(d, rot_ellipse(400, 410, 30, 76, 30), F_BLUE_SH, ow=5)
+        for k in range(3): line(d, [(410 + k*12, 350 - k*4), (420 + k*14, 330 - k*6)], 4)
+    elif wings == "fan":
+        for s in (-1, 1):
+            for k in range(3):
+                line(d, [(260 + s*(150 + k*18), 380 + k*26), (260 + s*(176 + k*20), 360 + k*26)], 4)
+    # eyes
+    mode = {"smug": "half", "wink": "open", "laugh": "happy", "shocked": "wide", "love": "heart", "open": "open"}.get(expr, "half")
+    if blink and mode in ("half", "open"): mode = "blink"
+    for side, ex in ((-1, 206), (1, 314)):
+        m = "happy" if (expr == "wink" and side == 1) else mode
+        big_eye(im, ex, 282, 36, 42, (70, 60, 140), (34, 26, 70), (150, 140, 230), m, side, F_BLUE)
+    d = ImageDraw.Draw(im)
+    for side, ex in ((-1, 206), (1, 314)):   # extra-long fancy lashes
+        if not (expr == "wink" and side == 1):
+            line(d, [(ex + 30*side, 252), (ex + 52*side, 232)], 5); line(d, [(ex + 36*side, 266), (ex + 60*side, 254)], 5)
+    for bx2 in (172, 348):
+        ell(d, [bx2-24, 344, bx2+24, 364], (255, 150, 180))
+    # hooked beak
+    bx, by = 260, 318
+    if mouth:
+        poly(d, [(bx-30, by+20), (bx+30, by+20), (bx, by+44 + 14*mouth)], F_BEAK_SH, ow=4)
+        ell(d, [bx-16, by+18, bx+16, by+30 + 10*mouth], (120, 40, 58))
+    poly(d, [(bx-34, by), (bx+34, by)] + [(bx + 34*math.cos(t), by + 30*math.sin(t)) for t in np.linspace(0.2, math.pi-0.2, 12)][::-1] if False else
+         [(bx-34, by+4), (bx-20, by-18), (bx+20, by-18), (bx+36, by+4), (bx+18, by+30), (bx, by+38), (bx-14, by+24)], F_BEAK, ow=4)
+    ell(d, [bx-16, by-12, bx-4, by-4], (255, 230, 170))
+    return im
+
+
+# ------------------------------------------------------------------ park (added Ep 2)
+def park_bg(tint=None):
+    """sunny park, 1080x1920; grass line ~y=1200, path, round trees, flowers."""
+    im = soft_sky((176, 222, 255), (230, 246, 255)).resize((W*SS, H*SS)); d = ImageDraw.Draw(im)
+    for (cx, cy, r) in ((220, 260, 60), (300, 240, 80), (390, 270, 56), (760, 380, 50), (830, 360, 70), (900, 390, 48)):
+        ell(d, [cx-r, cy-r*0.7, cx+r, cy+r*0.7], (255, 255, 255))
+    ell(d, [-300, 980, 700, 1500], (170, 222, 140), ow=5); ell(d, [400, 1000, 1500, 1500], (150, 210, 126), ow=5)
+    for (tx, ty, r, c) in ((120, 930, 150, (110, 190, 110)), (960, 900, 170, (100, 180, 104)), (560, 1000, 110, (126, 200, 118))):
+        d.rectangle(B([tx-22, ty, tx+22, ty+260]), fill=(176, 120, 76), outline=OUT, width=4*SS)
+        ell(d, [tx-r, ty-r*1.1, tx+r, ty+r*0.5], c, ow=5)
+        ell(d, [tx-r*0.6, ty-r*0.9, tx-r*0.1, ty-r*0.5], (160, 226, 150))
+    d.rectangle(B([0, 1200, W, H]), fill=(160, 216, 128))
+    line(d, [(0, 1200), (W, 1200)], 6, (110, 170, 96))
+    poly(d, [(300, 1200), (780, 1200), (1080, 1920), (0, 1920)], (246, 226, 190), ow=5)
+    rs = random.Random(5)
+    for k in range(26):
+        x, y = rs.uniform(10, 1070), rs.uniform(1230, 1900)
+        if 220 + (y-1200)*0.4 < x < 860 - (y-1200)*0.4 + 300: continue
+        col = [(255, 170, 200), (255, 236, 130), (255, 255, 255)][k % 3]
+        for a in range(5):
+            ang = a*2*math.pi/5
+            ell(d, [x + 12*math.cos(ang) - 9, y + 12*math.sin(ang) - 9, x + 12*math.cos(ang) + 9, y + 12*math.sin(ang) + 9], col, ow=2.5)
+        ell(d, [x-7, y-7, x+7, y+7], (255, 200, 80))
+    im = im.resize((W, H), Image.LANCZOS)
+    if tint:
+        im = Image.alpha_composite(im, Image.new("RGBA", (W, H), tint))
+    return im
+
+def bench_layer(cx=620):
+    """wooden park bench (behind characters), backrest top ~y=880, seat ~y=1060, legs to 1230."""
+    im = Image.new("RGBA", (W*SS, H*SS), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    x0, x1 = cx - 300, cx + 300
+    for lx in (x0 + 40, x1 - 40):
+        d.rectangle(B([lx-14, 900, lx+14, 1230]), fill=(120, 84, 60), outline=OUT, width=4*SS)
+    for y in (890, 960):
+        d.rounded_rectangle(B([x0, y, x1, y+50]), 12*SS, fill=(214, 150, 96), outline=OUT, width=5*SS)
+    d.rounded_rectangle(B([x0-20, 1050, x1+20, 1096]), 12*SS, fill=(196, 134, 84), outline=OUT, width=5*SS)
+    return im.resize((W, H), Image.LANCZOS)
+
+def dumpling_basket(d, x, y, s=1.0):
+    """little woven basket with 2 dumplings peeking out; bottom-centre at x,y (logical px)."""
+    dumpling(d, x - 34*s, y - 70*s, 0.42*s); dumpling(d, x + 34*s, y - 72*s, 0.42*s)
+    poly(d, [(x-92*s, y-80*s), (x+92*s, y-80*s), (x+72*s, y), (x-72*s, y)], (226, 170, 100), ow=5)
+    for k in range(1, 4):
+        line(d, [(x-90*s + k*4*s, y-80*s + k*20*s), (x+90*s - k*4*s, y-80*s + k*20*s)], 3, (186, 126, 70))
+    arc(d, [x-80*s, y-170*s, x+80*s, y-10*s], 190, 350, 7*s, (186, 126, 70))
