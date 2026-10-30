@@ -637,3 +637,74 @@ def dumpling_basket(d, x, y, s=1.0):
     for k in range(1, 4):
         line(d, [(x-90*s + k*4*s, y-80*s + k*20*s), (x+90*s - k*4*s, y-80*s + k*20*s)], 3, (186, 126, 70))
     arc(d, [x-80*s, y-170*s, x+80*s, y-10*s], 190, 350, 7*s, (186, 126, 70))
+
+
+# ------------------------------------------------------------------ café (added Ep 3)
+def cafe_bg(tint=None):
+    """cosy pastel café, 1080x1920; floor line ~y=1240, arched window, chalk menu of doodles, pendant lamps, cake counter."""
+    im = Image.new("RGBA", (W*SS, H*SS), (255, 232, 214, 255)); d = ImageDraw.Draw(im)
+    # striped wallpaper
+    for i in range(0, W, 90):
+        if (i//90) % 2 == 0: d.rectangle(B([i, 0, i+90, 1000]), fill=(255, 222, 206))
+    # wainscot
+    d.rectangle(B([0, 1000, W, 1240]), fill=(170, 222, 200))
+    for x in range(30, W, 150):
+        d.rounded_rectangle(B([x, 1030, x+110, 1210]), 10*SS, fill=(186, 232, 212), outline=(120, 180, 160), width=3*SS)
+    line(d, [(0, 1000), (W, 1000)], 8, (120, 180, 160))
+    # arched window (left)
+    win = [80, 300, 440, 860]
+    d.rounded_rectangle(B([win[0], win[1]+150, win[2], win[3]]), 10*SS, fill=(196, 232, 255), outline=(176, 120, 76), width=12*SS)
+    d.pieslice(B([win[0], win[1], win[2], win[1]+300]), 180, 360, fill=(196, 232, 255), outline=(176, 120, 76), width=12*SS)
+    ell(d, [130, 520, 260, 590], (255, 255, 255)); ell(d, [210, 500, 360, 580], (255, 255, 255))
+    line(d, [(260, 310), (260, 860)], 10, (176, 120, 76)); line(d, [(80, 600), (440, 600)], 10, (176, 120, 76))
+    for k in range(5):  # flower box
+        ell(d, [100 + k*68, 840, 150 + k*68, 890], [(255, 160, 190), (255, 230, 120), (255, 255, 255)][k % 3], ow=3)
+    d.rectangle(B([70, 870, 450, 920]), fill=(176, 120, 76), outline=OUT, width=4*SS)
+    # chalkboard with doodles (no text)
+    d.rounded_rectangle(B([600, 330, 960, 640]), 14*SS, fill=(70, 96, 86), outline=(176, 120, 76), width=12*SS)
+    for k, (x, y) in enumerate(((680, 420), (780, 420), (880, 420))):
+        arc(d, [x-34, y-24, x+34, y+30], 0, 180, 4, (240, 240, 230))         # cups
+        line(d, [(x-34, y), (x+34, y)], 4, (240, 240, 230))
+        steam(d, x, y-34, k*0.7, 0.4, (240, 240, 230))
+    poly(d, heart_pts(700, 560, 60), None, ow=3.5, outline=(255, 190, 210))
+    star(d, 800, 560, 26, (70, 96, 86), ow=3.5)
+    poly(d, heart_pts(890, 560, 50), None, ow=3.5, outline=(190, 240, 220))
+    # pendant lamps
+    for lx in (330, 760):
+        line(d, [(lx, 0), (lx, 170)], 4, (120, 90, 70))
+        poly(d, [(lx-70, 250), (lx-30, 170), (lx+30, 170), (lx+70, 250)], (255, 210, 120), ow=5)
+        ell(d, [lx-20, 238, lx+20, 270], (255, 248, 200), ow=3)
+    # floor (checker)
+    d.rectangle(B([0, 1240, W, H]), fill=(255, 244, 230))
+    for r, y in enumerate(range(1240, H, 90)):
+        for c, x in enumerate(range(0, W, 90)):
+            if (r + c) % 2 == 0: d.rectangle(B([x, y, x+90, y+90]), fill=(246, 206, 196))
+    line(d, [(0, 1240), (W, 1240)], 6, (150, 100, 66))
+    im = im.resize((W, H), Image.LANCZOS)
+    if tint:
+        im = Image.alpha_composite(im, Image.new("RGBA", (W, H), tint))
+    return im
+
+def cafe_table_layer(cx=540, top=1020):
+    """small round café table (front prop), tabletop surface ~top."""
+    im = Image.new("RGBA", (W*SS, H*SS), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    poly(d, [(cx-16, top+30), (cx+16, top+30), (cx+22, 1250), (cx-22, 1250)], (150, 110, 90), ow=5)
+    ell(d, [cx-110, 1230, cx+110, 1266], (150, 110, 90), ow=5)
+    ell(d, [cx-200, top-34, cx+200, top+40], (255, 255, 255), ow=6)
+    ell(d, [cx-180, top-30, cx+180, top+22], (240, 248, 246))
+    return im.resize((W, H), Image.LANCZOS)
+
+def teacup(d, x, y, s=1.0, col=(255, 190, 205)):
+    """little cup + saucer, bottom-centre at x,y."""
+    ell(d, [x-60*s, y-12*s, x+60*s, y+12*s], (255, 255, 255), ow=4)
+    poly(d, [(x-44*s, y-70*s), (x+44*s, y-70*s), (x+34*s, y-6*s), (x-34*s, y-6*s)], col, ow=4)
+    arc(d, [x+30*s, y-62*s, x+66*s, y-26*s], 270, 90, 6*s)
+    ell(d, [x-40*s, y-78*s, x+40*s, y-62*s], (180, 120, 90), ow=3)
+
+def leaf_fan(d, cx, cy, s=1.0, spread=1.0):
+    """Gola's homemade 'fabulous tail': a fan of leaves stuck behind him (Ep 3)."""
+    for k in range(7):
+        a = math.radians(-90 + (k - 3)*20*spread)
+        x, y = cx + 150*s*math.cos(a), cy + 150*s*math.sin(a)
+        poly(d, rot_ellipse(x, y, 26*s, 74*s, math.degrees(a) + 90), [(120, 200, 110), (160, 222, 120), (100, 180, 100)][k % 3], ow=4)
+        line(d, [(cx + 90*s*math.cos(a), cy + 90*s*math.sin(a)), (cx + 210*s*math.cos(a), cy + 210*s*math.sin(a))], 3, (70, 130, 70))
